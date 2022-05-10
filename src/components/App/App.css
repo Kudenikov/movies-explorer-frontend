@@ -1,0 +1,48 @@
+.link {
+    opacity: 1;
+    color: #000;
+    transition: opacity .3s ease-in;
+}
+
+.link:hover {
+    opacity: .8;
+}
+
+.link_decoration_none {
+    text-decoration: none;
+}
+
+.underline {
+    height: 1px;
+    background-color: #000;
+    margin: 23px 0 0 0;
+    padding: 0;
+}
+
+.underline_color_grey {
+    height: 1px;
+    background-color: #E8E8E8;
+    margin: 19px 0 20px;
+    padding: 0;
+}
+
+.active {
+    font-weight: 500;
+    cursor: default;
+}
+
+@media screen and (max-width: 767px) {
+    .underline {
+        margin: 28px 0 0 0;
+    }
+
+    .underline_color_grey {
+        margin: 19px 0 20px;
+    }
+}
+
+/*
+div, img, header, section, a, p, h1, h2, h3, ul, li, form {
+  border: solid red 1px;
+}
+*/
