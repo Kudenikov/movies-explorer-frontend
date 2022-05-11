@@ -35,7 +35,7 @@
 .menu__btn {
     display: flex;
     align-items: center;
-    position: fixed;
+    position: absolute;
     top: 22px;
     right: 38px;
     width: 28px;

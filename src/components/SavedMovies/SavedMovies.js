@@ -1,7 +1,6 @@
 import Header from '../Header/Header';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import More from '../More/More';
 import Footer from '../Footer/Footer';
 import Navigation from '../Navigation/Navigation';
 
@@ -17,7 +16,6 @@ function SavedMovies() {
                 displayLike="" 
                 displayDelete="card__icon_display"
             />
-            <More />
             <Footer />
         </>
     );
