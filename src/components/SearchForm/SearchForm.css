@@ -5,6 +5,7 @@
 }
 
 .search-form__form {
+    position: relative;
     background-color: #F4F4F4;
     display: flex;
     height: 72px;
@@ -38,6 +39,15 @@
     border: none;
     outline: none;
     width: calc(100% - 140px);
+}
+
+.search-form__error {
+    position: absolute;
+    top: 75px;
+    left: 10px;
+    font-size: 12px;
+    color: #FF004C;
+
 }
 
 .search-form__button {

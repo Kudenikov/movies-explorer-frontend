@@ -11,10 +11,15 @@
     font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
+.card__display_none {
+    display: none;
+}
+
 .card__image {
     width: 364px;
     height: 203px;
     object-fit: cover;
+    cursor: pointer;
 }
 
 .card__description {

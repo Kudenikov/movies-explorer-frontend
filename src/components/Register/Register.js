@@ -1,8 +1,6 @@
 import Auth from '../Auth/Auth';
 
-function Register() {
-
-    function onChange() {}
+function Register(props) {
 
     return (
         <Auth 
@@ -12,6 +10,17 @@ function Register() {
             linkText="Войти"
             link="/signin"
             addVertMargin=""
+            email={props.email}
+            password={props.password}
+            isNameValid={props.isNameValid}
+            isEmailValid={props.isEmailValid}
+            isPasswordValid={props.isPasswordValid}
+            emailInputError={props.emailInputError}
+            passwordInputError={props.passwordInputError}
+            handleEmailChange={props.handleEmailChange}
+            handlePasswordChange={props.handlePasswordChange}
+            handleSubmit={props.handleSubmit}
+            submitError={props.submitError}
         >
             <label className="auth__label">Имя
                 <input 
@@ -20,9 +29,10 @@ function Register() {
                     type="text" 
                     className="auth__input" 
                     required
-                    value="Артём"
-                    onChange={onChange}
+                    value={props.name}
+                    onChange={props.handleNameChange}
                 />
+                <span className="auth__input-error">{props.nameInputError}</span>
             </label>
         </Auth>
     )

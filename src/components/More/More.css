@@ -1,8 +1,12 @@
 .more {
     background-color: #FAFAFA;
-    display: flex;
+    display: none;
     margin: 0;
     padding: 0;
+}
+
+.more__visible {
+    display: flex;
 }
 
 .more__button {
