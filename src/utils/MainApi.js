@@ -44,17 +44,7 @@ class MainApi {
         })
         .then(this._checkResponse)
     }
-/*
-    getUserInfo() {
-        return fetch(`${this.address}/users/me`, {
-            method: 'GET',
-            headers: {
-                'authorization': this.token
-            }
-        })
-        .then(this._checkResponse)
-    }
-*/
+    
     getMovies() {
         return fetch(`${this.address}/movies`, {
             method: 'GET',
