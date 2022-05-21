@@ -53,8 +53,17 @@ function Movies() {
         event.preventDefault();
         if (!film) {
             return setError("Нужно ввести ключевое слово");
-        } else setError('');
-        searchMovies();
+        } else { 
+            setError('');
+            setIsPreloaderVisible(true);
+            setMovies([]);
+            setIsResultBlockVisible(false);
+            setIsButtonMoreVisible(false);
+            setTimeout(() => {
+                searchMovies();
+            }, 2000)
+        }
+        
     }
 
     function changeCheckbox() {
@@ -135,10 +144,6 @@ function Movies() {
     }, [movieIdToDelete])
 
     function searchMovies() {
-        setMovies([]);
-        setIsResultBlockVisible(false);
-        setIsButtonMoreVisible(false);
-        setIsPreloaderVisible(true);
         moviesApi.getMovies()
         .then((res) => {
             setFilteredMovies(res.filter(movie => 

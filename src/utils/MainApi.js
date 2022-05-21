@@ -44,7 +44,7 @@ class MainApi {
         })
         .then(this._checkResponse)
     }
-    
+
     getMovies() {
         return fetch(`${this.address}/movies`, {
             method: 'GET',

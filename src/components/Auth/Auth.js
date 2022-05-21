@@ -7,7 +7,7 @@ function Auth(props) {
 
     const [isActive, setIsActive] = useState(false);
     const navigate = useNavigate();
-
+    
     useEffect(() => {
         if (props.isEmailValid && props.isPasswordValid && props.isNameValid) {
             setIsActive(true);

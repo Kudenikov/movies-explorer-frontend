@@ -129,4 +129,8 @@
         margin: 14px 0 0 14px;
         font-size: 10px;
     }
+
+    .card__delete {
+        display: flex;
+    }
 }

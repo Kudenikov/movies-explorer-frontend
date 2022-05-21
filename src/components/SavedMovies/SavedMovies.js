@@ -33,6 +33,7 @@ function SavedMovies() {
     React.useEffect(() => {
         if (filteredMovies.length === 0) {
             setResultText('Ничего не найдено');
+            setMovies([]);
             return setIsResultBlockVisible(true);
         } else {
             setIsResultBlockVisible(false);
@@ -54,10 +55,9 @@ function SavedMovies() {
 
     function onDeleteClick(card) {
         mainApi.deleteCard(card._id)
-        .then(() => {
-            setFilteredMovies((state) => state.filter((item) => 
-            item._id !== card._id
-            ));
+        .then((res) => {
+            setFilteredMovies(filteredMovies.filter(movie => 
+                movie._id !== res.data._id));
         })
         .catch((error) => {
             console.log('ОШИБКА:', error);

@@ -43,6 +43,9 @@ function App() {
           localStorage.setItem('jwt', data.jwt);
           mainApi["token"] = `Bearer ${localStorage.getItem('jwt')}`;
           setLoggedIn(true);
+          setName('');
+          setEmail('');
+          setPassword('');
         })
       .catch((error) => {
           console.log('ОШИБКА:', error);
@@ -121,9 +124,15 @@ function App() {
   }
 
   function handleExitButton() {
+    setIsEmailValid(false);
+    setIsNameValid(false);
+    setIsPasswordValid(false);
     setLoggedIn(false);
     setSubmitError('');
     localStorage.removeItem('jwt');
+    localStorage.removeItem('filteredMovies');
+    localStorage.removeItem('inputData');
+    localStorage.removeItem('checkboxPosition');
     navigate("/signin");
   }
 
@@ -178,6 +187,7 @@ function App() {
           handleEmailChange={handleEmailChange}
           handlePasswordChange={handlePasswordChange}
           name={name}
+          setName={setName}
           email={email}
           password={password}
           isNameValid={isNameValid}
