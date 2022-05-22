@@ -1,6 +1,17 @@
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import Auth from '../Auth/Auth';
 
 function Register(props) {
+
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if (props.loggedIn){
+          navigate('/movies');
+        }
+
+      }, [props.loggedIn, navigate])
 
     return (
         <Auth 

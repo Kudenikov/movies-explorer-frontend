@@ -40,7 +40,14 @@ function Profile(props) {
         setNameInputError(input.validationMessage);
         const regex = /[^a-zа-яё -]/iu;
         if (regex.test(input.value)) {
+            setIsNameValid(false);
             setNameInputError('Допускается только латиница, кириллица, пробел или дефис');
+        } else if (input.value === currentUser.name) {
+            setIsNameValid(false);
+            setNameInputError('Необходимо ввести новые данные');
+        } else {
+          setIsNameValid(input.validity.valid);
+          setNameInputError(input.validationMessage);
         }
     }
 
@@ -51,8 +58,17 @@ function Profile(props) {
         props.setSubmitError('');
         const input = e.target;
         setEmail(input.value);
-        setIsEmailValid(input.validity.valid);
-        setEmailInputError(input.validationMessage);
+        const regex = /.+@.+\..+/i;
+        if (!regex.test(input.value)) {
+          setIsEmailValid(false);
+          setEmailInputError('Некорректный адрес электронной почты');
+        } else if (input.value === currentUser.email) {
+            setIsEmailValid(false);
+            setEmailInputError('Необходимо ввести новые данные');
+        } else { 
+          setEmailInputError('');
+          setIsEmailValid(true);
+        }
     }
 
     function updateProfile(e) {

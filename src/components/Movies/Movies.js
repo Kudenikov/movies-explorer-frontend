@@ -9,6 +9,7 @@ import ResultBlock from '../ResultBlock/ResultBlock';
 import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
 import React, { useState } from 'react';
+import { SCREEN_WIDTH, MAX_SHORT_MOVIE_LENGTH } from '../../utils/constants';
 
 function Movies() {
 
@@ -25,6 +26,7 @@ function Movies() {
     const [savedMoviesIdArray, setSavedMoviesIdArray] = useState([]);
     const [savedMoviesArray, setSavedMoviesArray] = useState([]);
     const [movieIdToDelete, setMovieIdToDelete] = useState();
+    const [allMovies, setAllMovies] = useState([]);
 
     React.useEffect(() => {
         getSavedMovies();
@@ -63,7 +65,6 @@ function Movies() {
                 searchMovies();
             }, 2000)
         }
-        
     }
 
     function changeCheckbox() {
@@ -71,14 +72,21 @@ function Movies() {
     }
 
     function setOrder() {
-        if (window.innerWidth >= 1137) {
+        if (window.innerWidth >= SCREEN_WIDTH.max) {
             setCountMovies(12);
-        } else if (window.innerWidth >= 634 && window.innerWidth < 1137) {
+        } else if (window.innerWidth >= SCREEN_WIDTH.min && window.innerWidth < SCREEN_WIDTH.max) {
             setCountMovies(8);
         } else setCountMovies(5);
     }
 
     React.useEffect(() => {
+        moviesApi.getMovies()
+            .then(res => setAllMovies(res))
+            .catch((error) => {
+                setResultText('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
+                setIsResultBlockVisible(true);
+                console.log('ОШИБКА:', error);
+            })
         const onResize = () => {
             setTimeout(() => {
                 setOrder()
@@ -116,7 +124,7 @@ function Movies() {
             setIsResultBlockVisible(false);
             if (checked) {
                 const newFilmArray = filteredMovies.filter(movie => 
-                    movie.duration <= 40);
+                    movie.duration <= MAX_SHORT_MOVIE_LENGTH);
                     if (newFilmArray.length === 0) {
                         setResultText('Ничего не найдено');
                         setMovies([]);
@@ -144,22 +152,14 @@ function Movies() {
     }, [movieIdToDelete])
 
     function searchMovies() {
-        moviesApi.getMovies()
-        .then((res) => {
-            setFilteredMovies(res.filter(movie => 
-                movie.nameRU.toLowerCase().includes(film)))
-            localStorage.setItem('inputData', film);
-        })
-        .catch((error) => {
-            setResultText('Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз');
-            setIsResultBlockVisible(true);
-            console.log('ОШИБКА:', error);
-        })
-        .finally(setIsPreloaderVisible(false))
+        setFilteredMovies(allMovies.filter(movie => 
+            movie.nameRU.toLowerCase().includes(film)))
+        localStorage.setItem('inputData', film);
+        setIsPreloaderVisible(false)
     }
 
     function onButtonMoreClick() {
-        if (window.innerWidth >= 1137) {
+        if (window.innerWidth >= SCREEN_WIDTH.max) {
             setCountMovies(countMovies + 3);
         } else {
             setCountMovies(countMovies + 2);

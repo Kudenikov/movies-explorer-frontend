@@ -26,15 +26,9 @@ function App() {
   const [submitError, setSubmitError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [isUserChecked, setIsUserChecked] = useState(false);
   
   const navigate = useNavigate();
-
-  useEffect(()=>{
-    if (loggedIn){
-      navigate('/movies');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loggedIn])
   
   useEffect(() => {
     if (isRegistered) {
@@ -46,35 +40,45 @@ function App() {
           setName('');
           setEmail('');
           setPassword('');
+          navigate('/movies');
         })
       .catch((error) => {
           console.log('ОШИБКА:', error);
       })
       setIsRegistered(false);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRegistered, email, password])
 
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      const jwt = localStorage.getItem('jwt');
-      // проверяем токен пользователя
-      mainApi.checkToken(jwt).then((res) => {
+      const jwt = localStorage.getItem('jwt') || '';
+      mainApi.checkToken(jwt)
+      .then((res) => {
         if (res.data) {
           setLoggedIn(true);
           setCurrentUser(res.data);
+          setIsUserChecked(true);
         }
       })
-      .catch(error => 
-        console.log('ОШИБКА:', error))
-    }
-  }, [loggedIn]);
+      .catch((error) => {
+        setIsUserChecked(true);
+        console.log('ОШИБКА:', error);
+      }
+    )}
+, []);
 
   function handleEmailChange(e) {
     setSubmitError('');
     const input = e.target;
     setEmail(input.value);
-    setIsEmailValid(input.validity.valid);
-    setEmailInputError(input.validationMessage);
+    const regex = /.+@.+\..+/i;
+    if (!regex.test(input.value)) {
+      setIsEmailValid(false);
+      setEmailInputError('Некорректный адрес электронной почты');
+    } else { 
+      setEmailInputError('');
+      setIsEmailValid(true);
+    }
   }
 
   function handlePasswordChange(e) {
@@ -89,11 +93,13 @@ function App() {
     setSubmitError('');
     const input = event.target;
     setName(input.value);
-    setIsNameValid(input.validity.valid);
-    setNameInputError(input.validationMessage);
     const regex = /[^a-zа-яё -]/iu;
     if (regex.test(input.value)) {
+        setIsNameValid(false);
         setNameInputError('Допускается только латиница, кириллица, пробел или дефис');
+    } else {
+      setIsNameValid(input.validity.valid);
+      setNameInputError(input.validationMessage);
     }
   }
 
@@ -133,7 +139,7 @@ function App() {
     localStorage.removeItem('filteredMovies');
     localStorage.removeItem('inputData');
     localStorage.removeItem('checkboxPosition');
-    navigate("/signin");
+    navigate("/");
   }
 
   function updateUser(user) {
@@ -149,77 +155,85 @@ function App() {
   }
 
   return (
-    <Routes>
-      <Route path="/" element={
-        <Main />  
-      }/>
+    <>
+    {isUserChecked ? 
+            <Routes>
+            <Route path="/" element={
+              <Main 
+                loggedIn={loggedIn}
+              />  
+            }/>
+    
+            <Route path="/movies" element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <Movies />
+              </ProtectedRoute>
+            }/>
+      
+            <Route path="/saved-movies" element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <SavedMovies />
+              </ProtectedRoute>
+            }/>
+      
+            <Route path="/profile" element={
+              <ProtectedRoute loggedIn={loggedIn}>
+                <CurrentUserContext.Provider value={currentUser}>
+                  <Profile 
+                    exitFromAccount={handleExitButton}
+                    updateUser={updateUser}
+                    submitError={submitError}
+                    setSubmitError={setSubmitError}
+                  />
+                </CurrentUserContext.Provider>
+              </ProtectedRoute>
+            }/>
+      
+            <Route path="/signup" element={
+              <Register 
+                handleSubmit={handleRegister}
+                handleNameChange={handleNameChange}
+                handleEmailChange={handleEmailChange}
+                handlePasswordChange={handlePasswordChange}
+                name={name}
+                setName={setName}
+                email={email}
+                password={password}
+                isNameValid={isNameValid}
+                isEmailValid={isEmailValid}
+                isPasswordValid={isPasswordValid}
+                nameInputError={nameInputError}
+                emailInputError={emailInputError}
+                passwordInputError={passwordInputError}
+                submitError={submitError}
+                loggedIn={loggedIn}
+              />  
+            }/>
+      
+            <Route path="/signin" element={
+              <Login 
+                handleSubmit={handleLogin}
+                handleEmailChange={handleEmailChange}
+                handlePasswordChange={handlePasswordChange}
+                email={email}
+                password={password}
+                isEmailValid={isEmailValid}
+                isPasswordValid={isPasswordValid}
+                emailInputError={emailInputError}
+                passwordInputError={passwordInputError}
+                submitError={submitError}
+                loggedIn={loggedIn}
+              />  
+            }/>
+      
+            <Route path="/*" element={
+              <PageNotFound />  
+            }/>
+          </Routes>
+  : null}
 
-      <Route path="/movies" element={
-        <ProtectedRoute loggedIn={loggedIn}>
-          <Movies />
-        </ProtectedRoute>
-      }/>
-
-      <Route path="/saved-movies" element={
-        <ProtectedRoute loggedIn={loggedIn}>
-          <SavedMovies />
-        </ProtectedRoute>
-      }/>
-
-      <Route path="/profile" element={
-        <ProtectedRoute loggedIn={loggedIn}>
-          <CurrentUserContext.Provider value={currentUser}>
-            <Profile 
-              exitFromAccount={handleExitButton}
-              updateUser={updateUser}
-              submitError={submitError}
-              setSubmitError={setSubmitError}
-            />
-          </CurrentUserContext.Provider>
-        </ProtectedRoute>
-      }/>
-
-
-      <Route path="/signup" element={
-        <Register 
-          handleSubmit={handleRegister}
-          handleNameChange={handleNameChange}
-          handleEmailChange={handleEmailChange}
-          handlePasswordChange={handlePasswordChange}
-          name={name}
-          setName={setName}
-          email={email}
-          password={password}
-          isNameValid={isNameValid}
-          isEmailValid={isEmailValid}
-          isPasswordValid={isPasswordValid}
-          nameInputError={nameInputError}
-          emailInputError={emailInputError}
-          passwordInputError={passwordInputError}
-          submitError={submitError}
-        />  
-      }/>
-
-      <Route path="/signin" element={
-        <Login 
-          handleSubmit={handleLogin}
-          handleEmailChange={handleEmailChange}
-          handlePasswordChange={handlePasswordChange}
-          email={email}
-          password={password}
-          isEmailValid={isEmailValid}
-          isPasswordValid={isPasswordValid}
-          emailInputError={emailInputError}
-          passwordInputError={passwordInputError}
-          submitError={submitError}
-        />  
-      }/>
-
-      <Route path="/*" element={
-        <PageNotFound />  
-      }/>
-    </Routes>
-  )
+      </>
+      )
 }
 
 export default App;

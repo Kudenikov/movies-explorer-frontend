@@ -7,6 +7,7 @@ import ResultBlock from '../ResultBlock/ResultBlock';
 import Preloader from '../Preloader/Preloader';
 import React, { useState } from 'react';
 import mainApi from '../../utils/MainApi';
+import { MAX_SHORT_MOVIE_LENGTH } from '../../utils/constants';
 
 function SavedMovies() {
 
@@ -39,7 +40,7 @@ function SavedMovies() {
             setIsResultBlockVisible(false);
             if (checked) {
                 const newFilmArray = filteredMovies.filter(movie => 
-                    movie.duration <= 40);
+                    movie.duration <= MAX_SHORT_MOVIE_LENGTH);
                     if (newFilmArray.length === 0) {
                         setResultText('Ничего не найдено');
                         setMovies([]);
