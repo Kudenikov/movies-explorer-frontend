@@ -9,12 +9,20 @@ function MoviesCard(props) {
         props.savedMoviesIdArray.includes(String(props.cardItem.id)) && setIsLiked(true);
     }, [props.cardItem.id, props.savedMoviesIdArray])
 
+    React.useEffect(() => {
+        if (window.innerWidth < 767 ) {
+            setIsVisible(true);
+        }
+    }, [])
+    
     function makeDeleteVisibile() {
         setIsVisible(true);
     }
 
     function makeDeleteInvisible() {
-        setIsVisible(false);
+        if (window.innerWidth > 767) {
+            setIsVisible(false);
+        }
     }
 
     function handleLikeClick() {
