@@ -23,6 +23,7 @@
 }
 
 .auth__form {
+    position: relative;
     display: flex;
     flex-direction: column;
     margin: 40px auto 0;
@@ -30,6 +31,7 @@
 }
 
 .auth__label {
+    position: relative;
     font-size: 10px;
     color: #A0A0A0;
     margin: 0;
@@ -63,6 +65,12 @@
     cursor: pointer;
 }
 
+.auth__button_disabled {
+    background-color: #F8F8F8;
+    color: #C2C2C2;
+    cursor: default;
+}
+
 .auth__done {
     display: flex;
     margin: 15px auto 0;
@@ -81,11 +89,32 @@
 }
 
 .auth__input-error {
+    position: absolute;
+    top: 55px;
+    left: 0px;
+    width: 100%;
     font-size: 10px;
     font-weight: 400;
     color: #EE3465;
-    margin: -13px 0 0 0;
     visibility: visible;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.auth__submit-error {
+    position: absolute;
+    text-align: center;
+    top: 320px;
+    left: 0px;
+    width: 100%;
+    font-size: 11px;
+    font-weight: 400;
+    color: #EE3465;
+    visibility: visible;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 @media screen and (max-width: 1279px) {

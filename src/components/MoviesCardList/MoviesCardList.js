@@ -1,19 +1,25 @@
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { initialCards } from '../../utils/constants';
 
 function MoviesCardList(props) {
+
     return (
         <section className="movies-cardlist">
             {
-            initialCards.map(card => (
+            props.movies.slice(0, props.countMovies).map(card => {
+                return (
                     <MoviesCard 
                         {...card} 
-                        key={card.id} 
+                        key={card.id || card._id} 
                         displayLike={props.displayLike} 
                         displayDelete={props.displayDelete}
+                        onLikeClick={props.onLikeClick}
+                        cardItem={card}
+                        prefix={props.prefix}
+                        onDeleteClick = { props.onDeleteClick }
+                        savedMoviesIdArray = { props.savedMoviesIdArray }
                     />
                 )
-            )
+                })
             }
         </section>
     );

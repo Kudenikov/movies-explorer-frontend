@@ -1,7 +1,7 @@
-function More() {
+function More(props) {
     return (
-        <section className="more">
-            <button type="button" className="more__button">Ещё</button>
+        <section className={`more ${props.isButtonMoreVisible ? "more__visible" : ""}`}>
+            <button type="button" className="more__button" onClick={props.onButtonMoreClick}>Ещё</button>
         </section>
     );
   }
