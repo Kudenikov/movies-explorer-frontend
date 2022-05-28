@@ -5,16 +5,16 @@ import { CurrentUserContext } from "../../contexts/CurrentUserContext";
 
 function Profile(props) {
 
+    const currentUser = useContext(CurrentUserContext);
+
     const [isVisible, setIsVisible] = useState(true);
     const [isActive, setIsActive] = useState(false);
-    const [name, setName] = useState('');
-    const [isNameValid, setIsNameValid] = useState(false);
+    const [name, setName] = useState(currentUser.name);
+    const [isNameValid, setIsNameValid] = useState(true);
     const [nameInputError, setNameInputError] = useState('');
-    const [email, setEmail] = useState('');
-    const [isEmailValid, setIsEmailValid] = useState(false);
+    const [email, setEmail] = useState(currentUser.email);
+    const [isEmailValid, setIsEmailValid] = useState(true);
     const [emailInputError, setEmailInputError] = useState('');
-
-    const currentUser = useContext(CurrentUserContext);
 
     useEffect(() => {
         setName(currentUser.name);
@@ -22,12 +22,15 @@ function Profile(props) {
     }, [currentUser]);
 
     useEffect(() => {
-        if (isEmailValid && isNameValid) {
-            setIsActive(true);
-        } else {
-            setIsActive(false);
-        }
-      }, [isEmailValid, isNameValid])
+        if (name !== currentUser.name || email !== currentUser.email) {
+            console.log(name, currentUser.name);
+            if (isEmailValid && isNameValid) {
+                setIsActive(true);
+            } else {
+                setIsActive(false);
+            } 
+        } else {setIsActive(false)}
+      }, [isEmailValid, isNameValid, name, email, currentUser])
     
     function handleNameChange(event) {
         if (isVisible) {
@@ -42,9 +45,6 @@ function Profile(props) {
         if (regex.test(input.value)) {
             setIsNameValid(false);
             setNameInputError('Допускается только латиница, кириллица, пробел или дефис');
-        } else if (input.value === currentUser.name) {
-            setIsNameValid(false);
-            setNameInputError('Необходимо ввести новые данные');
         } else {
           setIsNameValid(input.validity.valid);
           setNameInputError(input.validationMessage);
@@ -62,9 +62,6 @@ function Profile(props) {
         if (!regex.test(input.value)) {
           setIsEmailValid(false);
           setEmailInputError('Некорректный адрес электронной почты');
-        } else if (input.value === currentUser.email) {
-            setIsEmailValid(false);
-            setEmailInputError('Необходимо ввести новые данные');
         } else { 
           setEmailInputError('');
           setIsEmailValid(true);
@@ -80,8 +77,6 @@ function Profile(props) {
 
     function clickHandler() {
         setIsVisible(false);
-        setName('');
-        setEmail('');
         props.setSubmitError('');
     }
 
