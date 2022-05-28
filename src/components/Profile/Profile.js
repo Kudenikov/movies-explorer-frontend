@@ -23,13 +23,13 @@ function Profile(props) {
 
     useEffect(() => {
         if (name !== currentUser.name || email !== currentUser.email) {
+            console.log(name, currentUser.name);
             if (isEmailValid && isNameValid) {
                 setIsActive(true);
-            } 
-        } else {
+            } else {
                 setIsActive(false);
-        }
-
+            } 
+        } else {setIsActive(false)}
       }, [isEmailValid, isNameValid, name, email, currentUser])
     
     function handleNameChange(event) {
